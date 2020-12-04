@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>我的第一篇博客redis学习整理笔记 // My New Hugo Site</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.79.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://tonylai111.github.io/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="我的第一篇博客redis学习整理笔记"/>
+<meta name="twitter:description" content="reids学习笔记 文章结构：  什么是NoSQL Redis的使用（下载和安装） Redis数据库的操作 jedis(重点) Redis的持久化机制（了解） Redis在web应用里怎样使用 Redis相关面试题  学习目标：
+ 了解NoSql的概念：非关系型数据库 了解Redis数据库：以key_value结构存储数据，特点是：快，数据存储在内存中 安装Linux版的Redis服务器，能够使用Redis客户端访问Redis 能够说出Redis的五种数据类型：String.，hash ，list， set ，zset(sortedset) 掌握操作string类型的数据的命令：set name tom ,get name , del name 了解其他数据类型的的操作命令 掌握Jedis操作 Redis的基本步骤：导包，创建Jedis,使用jedis操作数据库，jedis.close 了解Redis的两种持久化机制：RDB模式（高效不安全），AOF模式（低效，会冗余数据，安全） 了解Redis在Web应用的使用：优先从Redis中找数据，如果找不到，再从Mysql中查找，如果数据有变更，需要清除缓存  一、什么是NoSQL 1.1什么是非关系型数据库 NoSQL :Not only SQL 泛指一切非关系型数据库，不以表的形式存取数据，数据之间没有关联关系
+1.2.什么是关系型数据库 以表的形式存取数据，以约束的方式来维护数据之间的关系，这样的数据库叫关系型数据库。常用的有MySql、Oracle。 关系型数据库的缺点 高并发：瞬间有海量的请求，需要操作数据库。导致高并发问题 高性能：瞬间从海量数据里找到某一条数据 高扩展：数据库集群时的数据迁移问题 1.3.NoSQL在web应用里的使用 NoSQL的优点：可以实现高并发、高性能、有灵活的数据模型 NoSQL的缺点：不能维护数据之间的业务关系，比如：商品信息和分类信息之间就有关联关系 NoSQL在web应用里通常是作为辅助的数据库，主数据库仍然是关系型数据库。 比如Redis，作为缓存数据库来使用，可以提高web应用的性能。
+二、Redis的使用（下载和安装） 2.1.什么是Redis Redis是一个c编写的开源免费的非关系型数据库，是以高读写性能著称的（读取110000次/秒，写80000次/秒），是以key-value的形式存储数据的，把数据保存在了内存当中。 端口：6379 2.2.下载和安装 Windows版的使用： 启动服务：双击==redis-server.exe== 访问redis，使用客户端：==redis-cli.exe== Linux版的使用： 启动服务：./redis-serverredis.conf 访问redis，使用客户端：./redis-cli 2.3．Redis的基本应用 启动redis的服务：./redis-server redis.conf 使用Redis专用客户端，访问Redis：访问本机的Redis：./redis-cli访问其它主机的Redis： redis-cli -h ip地址 -p端口 关闭Redis客户端，退出访问：exit quit 关闭Redis服务：."/>
+
+    <meta property="og:title" content="我的第一篇博客redis学习整理笔记" />
+<meta property="og:description" content="reids学习笔记 文章结构：  什么是NoSQL Redis的使用（下载和安装） Redis数据库的操作 jedis(重点) Redis的持久化机制（了解） Redis在web应用里怎样使用 Redis相关面试题  学习目标：
+ 了解NoSql的概念：非关系型数据库 了解Redis数据库：以key_value结构存储数据，特点是：快，数据存储在内存中 安装Linux版的Redis服务器，能够使用Redis客户端访问Redis 能够说出Redis的五种数据类型：String.，hash ，list， set ，zset(sortedset) 掌握操作string类型的数据的命令：set name tom ,get name , del name 了解其他数据类型的的操作命令 掌握Jedis操作 Redis的基本步骤：导包，创建Jedis,使用jedis操作数据库，jedis.close 了解Redis的两种持久化机制：RDB模式（高效不安全），AOF模式（低效，会冗余数据，安全） 了解Redis在Web应用的使用：优先从Redis中找数据，如果找不到，再从Mysql中查找，如果数据有变更，需要清除缓存  一、什么是NoSQL 1.1什么是非关系型数据库 NoSQL :Not only SQL 泛指一切非关系型数据库，不以表的形式存取数据，数据之间没有关联关系
+1.2.什么是关系型数据库 以表的形式存取数据，以约束的方式来维护数据之间的关系，这样的数据库叫关系型数据库。常用的有MySql、Oracle。 关系型数据库的缺点 高并发：瞬间有海量的请求，需要操作数据库。导致高并发问题 高性能：瞬间从海量数据里找到某一条数据 高扩展：数据库集群时的数据迁移问题 1.3.NoSQL在web应用里的使用 NoSQL的优点：可以实现高并发、高性能、有灵活的数据模型 NoSQL的缺点：不能维护数据之间的业务关系，比如：商品信息和分类信息之间就有关联关系 NoSQL在web应用里通常是作为辅助的数据库，主数据库仍然是关系型数据库。 比如Redis，作为缓存数据库来使用，可以提高web应用的性能。
+二、Redis的使用（下载和安装） 2.1.什么是Redis Redis是一个c编写的开源免费的非关系型数据库，是以高读写性能著称的（读取110000次/秒，写80000次/秒），是以key-value的形式存储数据的，把数据保存在了内存当中。 端口：6379 2.2.下载和安装 Windows版的使用： 启动服务：双击==redis-server.exe== 访问redis，使用客户端：==redis-cli.exe== Linux版的使用： 启动服务：./redis-serverredis.conf 访问redis，使用客户端：./redis-cli 2.3．Redis的基本应用 启动redis的服务：./redis-server redis.conf 使用Redis专用客户端，访问Redis：访问本机的Redis：./redis-cli访问其它主机的Redis： redis-cli -h ip地址 -p端口 关闭Redis客户端，退出访问：exit quit 关闭Redis服务：." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tonylai111.github.io/post/1/" />
+<meta property="article:published_time" content="2020-12-04T21:36:17+08:00" />
+<meta property="article:modified_time" content="2020-12-04T21:36:17+08:00" />
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://tonylai111.github.io/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <h1>My New Hugo Site</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+      <div class="app-header-social">
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">我的第一篇博客redis学习整理笔记</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Dec 4, 2020
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          2 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="reids学习笔记">reids学习笔记</h1>
+<h2 id="文章结构">文章结构：</h2>
+<ul>
+<li>什么是NoSQL</li>
+<li>Redis的使用（下载和安装）</li>
+<li>Redis数据库的操作</li>
+<li>jedis(重点)</li>
+<li>Redis的持久化机制（了解）</li>
+<li>Redis在web应用里怎样使用</li>
+<li>Redis相关面试题</li>
+</ul>
+<p>学习目标：</p>
+<ul>
+<li>了解NoSql的概念：非关系型数据库</li>
+<li>了解Redis数据库：以key_value结构存储数据，特点是：快，数据存储在内存中</li>
+<li>安装Linux版的Redis服务器，能够使用Redis客户端访问Redis</li>
+<li>能够说出Redis的五种数据类型：String.，hash ，list， set ，zset(sortedset)</li>
+<li>掌握操作string类型的数据的命令：<strong>set</strong> name tom ,<strong>get</strong> name , <strong>del</strong> name</li>
+<li>了解其他数据类型的的操作命令</li>
+<li>掌握Jedis操作 Redis的基本步骤：导包，创建Jedis,使用jedis操作数据库，jedis.close</li>
+<li>了解Redis的两种持久化机制：RDB模式（高效不安全），AOF模式（低效，会冗余数据，安全）</li>
+<li>了解Redis在Web应用的使用：优先从Redis中找数据，如果找不到，再从Mysql中查找，如果数据有变更，需要清除缓存</li>
+</ul>
+<h2 id="一什么是nosql">一、什么是NoSQL</h2>
+<p><strong>1.1什么是非关系型数据库</strong>
+NoSQL :Not only SQL 泛指一切非关系型数据库，不以表的形式存取数据，数据之间没有关联关系</p>
+<p><strong>1.2.什么是关系型数据库</strong>
+以表的形式存取数据，以约束的方式来维护数据之间的关系，这样的数据库叫关系型数据库。常用的有MySql、Oracle。
+关系型数据库的缺点
+高并发：瞬间有海量的请求，需要操作数据库。导致高并发问题
+高性能：瞬间从海量数据里找到某一条数据
+高扩展：数据库集群时的数据迁移问题
+<strong>1.3.NoSQL在web应用里的使用</strong>
+NoSQL的优点：可以实现高并发、高性能、有灵活的数据模型
+NoSQL的缺点：不能维护数据之间的业务关系，比如：商品信息和分类信息之间就有关联关系
+NoSQL在web应用里通常是作为<strong>辅助的数据库</strong>，主数据库仍然是关系型数据库。
+比如Redis，作为<strong>缓存数据库</strong>来使用，可以提高web应用的性能。</p>
+<h2 id="二redis的使用下载和安装">二、Redis的使用（下载和安装）</h2>
+<p><strong>2.1.什么是Redis</strong>
+Redis是一个c编写的开源免费的<strong>非关系型数据库</strong>，是以<strong>高读写性能</strong>著称的（读取110000次/秒，写80000次/秒），是以key-value的形式存储数据的，把<strong>数据保存在了内存</strong>当中。
+<strong>端口：6379</strong>
+<strong>2.2.下载和安装</strong>
+Windows版的使用：
+启动服务：双击==redis-server.exe==
+访问redis，使用客户端：==redis-cli.exe==
+Linux版的使用：
+启动服务：./redis-serverredis.conf
+访问redis，使用客户端：./redis-cli
+<strong>2.3．Redis的基本应用</strong>
+启动redis的服务：./redis-server redis.conf
+使用Redis专用客户端，访问Redis：访问本机的Redis：./redis-cli访问其它主机的Redis： redis-cli -h ip地址 -p端口
+关闭Redis客户端，退出访问：exit               quit
+关闭Redis服务：./redis-cli shutdown</p>
+<h2 id="三redis数据库的操作">三、Redis数据库的操作</h2>
+<p><strong>3.1Redis的数据类型</strong></p>
+<p>Redis是使用key-value形式保存数据的，key:始终保存string类型,通常不超过1024个字符，会影响读写的性能，value:有5种数据类型
+string:字符串类型
+hash:哈希类型，类似于Java的HashMap
+list:链表类型：类似于Java的LinkedList
+set：集合类型：集合里的成员是无序不重复的
+zset:sorted set:有序集合类型，集合里的成员是不重复，但是是有顺序的
+==<strong>3.1.1操作string(重点)</strong>==
+设置数据：set key value.比如：set username tom
+获取数据：get key 比如：get username
+删除数据：del key, 比如：del username
+<strong>3.1.2操作hash</strong>
+设置数据：hset key field value 比如：hset user name jerry
+获取数据：hget key field 比如：hget user name
+删除数据：hdel key field 比如：hdel user age
+获取长度：hdel key 比如：hlen user
+<strong>3.1.3操作list</strong>
+添加数据
+从左压入一个数据：lpush key value1 value2 &hellip;
+例如：lpush mylist msg1 msg2 msg3 结果是：msg3 msg2 msg1
+从右边压入一个数据：rpush value1 value2 &hellip;
+例如：rpush mylist msg5 msg6 msg7 结果是：msg5 msg6 msg7
+查看数据：lrang key start end
+查询全部：lrang mylist 0 -1
+取出数据：
+从左边取出一个数据：lpop key 取出最左边的那个数据，取出之后，列表里没有这个数据
+从右边取出一个数据：rpop key   取出最右边的那个数据，取出之后，列表里没有这个数据了
+<strong>3.1.4操作set</strong>
+无序不重复的数据集合，集合里的成员：member
+添加成员：sadd key member 例如：sadd myset tom
+随机取成员：srandmember key 例如： srandmember myset
+删除成员: srem key member 例如：srem myset tom
+查看成员： smembets key 例如：smembers myset
+<strong>3.1.5通用的Key操作</strong>
+keys *： 查询Redis里所有的key。 *：表示任意个任意字符，?：表示一个任意字符
+exists key：判断某个key是否存在
+type key：判断key对应value的类型</p>
+<h2 id="四jedis重点">四、jedis(重点)</h2>
+<p><strong>4.1什么是jedis</strong></p>
+<p>Jedis：java redis Java程序操作redis的方式
+需要引入jar包 ：jedis-*。jar, 如果要使用连接池，需要再引入：commons-pool2-2.3.jar
+操作Redis的步骤
+1、创建连接对象：Jedis
+2、操作Redis数据库
+3、释放资源</p>
+<p><strong>4.2Jedis的API</strong>
+连接对象 Jedis
+构造方法：Jedis(String host ,int port)
+Jedis的常用方法：操作Redis的方法名</p>
+<ul>
+<li>设置字符串：set(String key, String value)</li>
+<li>获取字符串：get (String key )</li>
+<li>删除字符串：del(String key)</li>
+<li>释放资源：Jedis的close（）方法
+连接池配置信息类：JedisPoolConfig
+构造方法：无参构造
+<strong>常用方法</strong>：</li>
+<li>setMaxTotal():设置最大容量</li>
+<li>setMaxIdle():设置最大空闲连接
+连接池类：JedisPool
+<strong>构造方法：</strong></li>
+<li>JedisPool(String host,int port)</li>
+<li>JedisPool(JedisPoolConfig config,String host , int port)
+常用方法：
+getResource():从池子里获取一个连接对象，返回结果，Jedis对象</li>
+</ul>
+<h2 id="五redis的持久化机制了解">五、Redis的持久化机制（了解）</h2>
+<p>Redis的数据是以key-value形式保存在内存中的，为了持久化存储数据，Redis也提供了持久化机制，有两种：
+RDB模式：快照模式，默认开启状态的
+AOF模式：appendonly file，需要手动开启
+<strong>5.1RDB模式</strong>
+快照模式：在某一时刻，把Redis内存中的所有数据，生成快照文件保存到磁盘上。
+默认开启状态
+生成的文件名称：dump.rdb
+生成的文件位置：在redis-server的运行路径
+什么时候生成快照文件：
+save 900 1      如果只有1次变更，900秒保存一次
+save 300 10     如果只有10次变更，300秒保存一次
+save 60 10000   如果是有10000次变更，60秒保存一次
+优点：RDB模式对Redis的存取性能影响不大
+缺点：容易丢失数据
+<strong>5.2AOF模式</strong>
+AOF：AppendOnly File，定时把执行的数据变更的命令，追加保存到磁盘文件上。等Redis重启之后，会自动读取AOF的文件，依次执行文件里的命令，重构数据库。
+AOF模式，是默认关闭状态的，==需要手动开启==
+开启AOF模式：修改redis.conf文件，把appendonlyno的值改成yes
+保存的文件名称：appendonly.aof
+保存的文件位置：在redis-server的运行路径
+什么时候把数据变更命令保存到文件：
+appendfsync always      每次数据变更，都保存一次
+appendfsync everysec      每秒保存一次
+appendfsync no           不保存
+优点：不容易丢失数据
+缺点：对性能的影响比较大，容易产生冗余数据</p>
+<h2 id="六redis在web应用里怎样使用">六、Redis在web应用里怎样使用</h2>
+<p>web应用里，数据的持久化保存，仍然要使用关系型数据库； 如果有一些数据，是查询非常频繁，而变更又不多，就可以把这些数据缓存的Redis里，可以提高web应用的性能。</p>
+<h2 id="七redis相关面试题">七、Redis相关面试题</h2>
+<p><strong>用缓存有什么不良后果</strong></p>
+<p>常见的缓存问题有：</p>
+<ul>
+<li>缓存和数据库双写不一致</li>
+<li>缓存雪崩</li>
+<li>缓存穿透</li>
+<li>缓存的并发竞争</li>
+</ul>
+<p>以上问题是在开发中都很容易产生的，解决办法，后面会专门写一篇文章来解决以上问题</p>
+<p>第一次写，,这是根据之前的笔记整理的，格式不太会弄，请多见谅，<code>熟能生巧吧</code></p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
