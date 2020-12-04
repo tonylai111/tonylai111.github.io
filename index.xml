@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Site</title>
+    <link>https:tonylai111.github.io/</link>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https:tonylai111.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https:tonylai111.github.io/reids%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https:tonylai111.github.io/reids%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>reids学习笔记 文章结构：  什么是NoSQL Redis的使用（下载和安装） Redis数据库的操作 jedis(重点) Redis的持久化机制（了解） Redis在web应用里怎样使用 Redis相关面试题  学习目标：
+ 了解NoSql的概念：非关系型数据库 了解Redis数据库：以key_value结构存储数据，特点是：快，数据存储在内存中 安装Linux版的Redis服务器，能够使用Redis客户端访问Redis 能够说出Redis的五种数据类型：String.，hash ，list， set ，zset(sortedset) 掌握操作string类型的数据的命令：set name tom ,get name , del name 了解其他数据类型的的操作命令 掌握Jedis操作 Redis的基本步骤：导包，创建Jedis,使用jedis操作数据库，jedis.close 了解Redis的两种持久化机制：RDB模式（高效不安全），AOF模式（低效，会冗余数据，安全） 了解Redis在Web应用的使用：优先从Redis中找数据，如果找不到，再从Mysql中查找，如果数据有变更，需要清除缓存  一、什么是NoSQL 1.1什么是非关系型数据库 NoSQL :Not only SQL 泛指一切非关系型数据库，不以表的形式存取数据，数据之间没有关联关系
+1.2.什么是关系型数据库 以表的形式存取数据，以约束的方式来维护数据之间的关系，这样的数据库叫关系型数据库。常用的有MySql、Oracle。 关系型数据库的缺点 高并发：瞬间有海量的请求，需要操作数据库。导致高并发问题 高性能：瞬间从海量数据里找到某一条数据 高扩展：数据库集群时的数据迁移问题 1.3.NoSQL在web应用里的使用 NoSQL的优点：可以实现高并发、高性能、有灵活的数据模型 NoSQL的缺点：不能维护数据之间的业务关系，比如：商品信息和分类信息之间就有关联关系 NoSQL在web应用里通常是作为辅助的数据库，主数据库仍然是关系型数据库。 比如Redis，作为缓存数据库来使用，可以提高web应用的性能。
+二、Redis的使用（下载和安装） 2.1.什么是Redis Redis是一个c编写的开源免费的非关系型数据库，是以高读写性能著称的（读取110000次/秒，写80000次/秒），是以key-value的形式存储数据的，把数据保存在了内存当中。 端口：6379 2.2.下载和安装 Windows版的使用： 启动服务：双击==redis-server.exe== 访问redis，使用客户端：==redis-cli.exe== Linux版的使用： 启动服务：./redis-serverredis.conf 访问redis，使用客户端：./redis-cli 2.3．Redis的基本应用 启动redis的服务：./redis-server redis.conf 使用Redis专用客户端，访问Redis：访问本机的Redis：./redis-cli访问其它主机的Redis： redis-cli -h ip地址 -p端口 关闭Redis客户端，退出访问：exit quit 关闭Redis服务：.</description>
+    </item>
+    
+  </channel>
+</rss>
